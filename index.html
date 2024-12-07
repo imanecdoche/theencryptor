@@ -1,0 +1,346 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Encryption App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .btn {
+            border-radius: 0px;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .btn:hover {
+            background-color: #333;
+        }
+        .btn:active {
+            transform: scale(0.95);
+        }
+        input[type="text"], textarea {
+            border: none;
+            border-radius: 0px;
+            background-color: rgba(0, 0, 0, 0.15);
+        }
+        input[type="text"]:hover, textarea:hover {
+            border: none;
+        }
+        input[type="text"]:active, textarea:active {
+            background-color: rgba(128, 128, 128, 0.1);
+        }
+        input[type="text"] {
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-roboto">
+    <div class="container mx-auto p-4">
+        <div class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-lg">
+            <h1 class="text-2xl font-bold mb-4 text-center">Text Encryption App</h1>
+            <form id="encryptionForm">
+                <div class="mb-4 relative">
+                    <label for="inputText" class="block text-gray-700 font-bold mb-2">Enter Text to Encrypt:</label>
+                    <textarea id="inputText" class="w-full p-2 rounded-md" rows="4"></textarea>
+                    <button type="button" class="absolute top-0 right-0 mt-2 mr-2 text-gray-500 hover:text-gray-700" onclick="clearInput()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="text-center mb-4">
+                    <button type="button" class="bg-gray-800 text-white px-4 py-2 w-full btn" onclick="pasteText()">Paste</button>
+                </div>
+                <div class="mb-4">
+                    <label for="outputText" class="block text-gray-700 font-bold mb-2">Encrypted Text:</label>
+                    <textarea id="outputText" class="w-full p-2 rounded-md" rows="4" readonly></textarea>
+                </div>
+                <div class="text-center mb-4">
+                    <button type="button" class="bg-gray-800 text-white px-4 py-2 w-full btn" onclick="copyText()">Copy</button>
+                </div>
+                <div class="text-center mb-4">
+                    <button type="button" class="bg-gray-800 text-white px-4 py-2 w-full btn" onclick="openEncryptionKeyPage()">Edit Encryption Key</button>
+                </div>
+                <div class="text-center">
+                    <button type="button" class="bg-blue-500 text-white px-4 py-2 w-full btn" onclick="encryptText()">Encrypt</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="encryptionKeyPage" class="hidden fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-4xl w-full">
+            <h2 class="text-2xl font-bold mb-4 text-center">Edit Encryption Key</h2>
+            <form id="encryptionKeyForm">
+                <div class="mb-4">
+                    <label for="keyName" class="block text-gray-700 font-bold mb-2">Key Name:</label>
+                    <input type="text" id="keyName" class="w-full p-2 rounded-md" placeholder="Enter key name">
+                </div>
+                <div class="grid grid-cols-6 gap-4 mb-4">
+                    <div>
+                        <label for="keyA" class="block text-gray-700 font-bold mb-2">A:</label>
+                        <input type="text" id="keyA" class="w-full p-2 rounded-md" maxlength="1" value="O">
+                    </div>
+                    <div>
+                        <label for="keyB" class="block text-gray-700 font-bold mb-2">B:</label>
+                        <input type="text" id="keyB" class="w-full p-2 rounded-md" maxlength="1" value="C">
+                    </div>
+                    <div>
+                        <label for="keyC" class="block text-gray-700 font-bold mb-2">C:</label>
+                        <input type="text" id="keyC" class="w-full p-2 rounded-md" maxlength="1" value="B">
+                    </div>
+                    <div>
+                        <label for="keyD" class="block text-gray-700 font-bold mb-2">D:</label>
+                        <input type="text" id="keyD" class="w-full p-2 rounded-md" maxlength="1" value="R">
+                    </div>
+                    <div>
+                        <label for="keyE" class="block text-gray-700 font-bold mb-2">E:</label>
+                        <input type="text" id="keyE" class="w-full p-2 rounded-md" maxlength="1" value="I">
+                    </div>
+                    <div>
+                        <label for="keyF" class="block text-gray-700 font-bold mb-2">F:</label>
+                        <input type="text" id="keyF" class="w-full p-2 rounded-md" maxlength="1" value="H">
+                    </div>
+                    <div>
+                        <label for="keyG" class="block text-gray-700 font-bold mb-2">G:</label>
+                        <input type="text" id="keyG" class="w-full p-2 rounded-md" maxlength="1" value="Y">
+                    </div>
+                    <div>
+                        <label for="keyH" class="block text-gray-700 font-bold mb-2">H:</label>
+                        <input type="text" id="keyH" class="w-full p-2 rounded-md" maxlength="1" value="F">
+                    </div>
+                    <div>
+                        <label for="keyI" class="block text-gray-700 font-bold mb-2">I:</label>
+                        <input type="text" id="keyI" class="w-full p-2 rounded-md" maxlength="1" value="E">
+                    </div>
+                    <div>
+                        <label for="keyJ" class="block text-gray-700 font-bold mb-2">J:</label>
+                        <input type="text" id="keyJ" class="w-full p-2 rounded-md" maxlength="1" value="V">
+                    </div>
+                    <div>
+                        <label for="keyK" class="block text-gray-700 font-bold mb-2">K:</label>
+                        <input type="text" id="keyK" class="w-full p-2 rounded-md" maxlength="1" value="L">
+                    </div>
+                    <div>
+                        <label for="keyL" class="block text-gray-700 font-bold mb-2">L:</label>
+                        <input type="text" id="keyL" class="w-full p-2 rounded-md" maxlength="1" value="K">
+                    </div>
+                    <div>
+                        <label for="keyM" class="block text-gray-700 font-bold mb-2">M:</label>
+                        <input type="text" id="keyM" class="w-full p-2 rounded-md" maxlength="1" value="N">
+                    </div>
+                    <div>
+                        <label for="keyN" class="block text-gray-700 font-bold mb-2">N:</label>
+                        <input type="text" id="keyN" class="w-full p-2 rounded-md" maxlength="1" value="M">
+                    </div>
+                    <div>
+                        <label for="keyO" class="block text-gray-700 font-bold mb-2">O:</label>
+                        <input type="text" id="keyO" class="w-full p-2 rounded-md" maxlength="1" value="A">
+                    </div>
+                    <div>
+                        <label for="keyP" class="block text-gray-700 font-bold mb-2">P:</label>
+                        <input type="text" id="keyP" class="w-full p-2 rounded-md" maxlength="1" value="T">
+                    </div>
+                    <div>
+                        <label for="keyQ" class="block text-gray-700 font-bold mb-2">Q:</label>
+                        <input type="text" id="keyQ" class="w-full p-2 rounded-md" maxlength="1" value="Z">
+                    </div>
+                    <div>
+                        <label for="keyR" class="block text-gray-700 font-bold mb-2">R:</label>
+                        <input type="text" id="keyR" class="w-full p-2 rounded-md" maxlength="1" value="D">
+                    </div>
+                    <div>
+                        <label for="keyS" class="block text-gray-700 font-bold mb-2">S:</label>
+                        <input type="text" id="keyS" class="w-full p-2 rounded-md" maxlength="1" value="X">
+                    </div>
+                    <div>
+                        <label for="keyT" class="block text-gray-700 font-bold mb-2">T:</label>
+                        <input type="text" id="keyT" class="w-full p-2 rounded-md" maxlength="1" value="P">
+                    </div>
+                    <div>
+                        <label for="keyU" class="block text-gray-700 font-bold mb-2">U:</label>
+                        <input type="text" id="keyU" class="w-full p-2 rounded-md" maxlength="1" value="U">
+                    </div>
+                    <div>
+                        <label for="keyV" class="block text-gray-700 font-bold mb-2">V:</label>
+                        <input type="text" id="keyV" class="w-full p-2 rounded-md" maxlength="1" value="J">
+                    </div>
+                    <div>
+                        <label for="keyW" class="block text-gray-700 font-bold mb-2">W:</label>
+                        <input type="text" id="keyW" class="w-full p-2 rounded-md" maxlength="1" value="">
+                    </div>
+                    <div>
+                        <label for="keyX" class="block text-gray-700 font-bold mb-2">X:</label>
+                        <input type="text" id="keyX" class="w-full p-2 rounded-md" maxlength="1" value="S">
+                    </div>
+                    <div>
+                        <label for="keyY" class="block text-gray-700 font-bold mb-2">Y:</label>
+                        <input type="text" id="keyY" class="w-full p-2 rounded-md" maxlength="1" value="G">
+                    </div>
+                    <div>
+                        <label for="keyZ" class="block text-gray-700 font-bold mb-2">Z:</label>
+                        <input type="text" id="keyZ" class="w-full p-2 rounded-md" maxlength="1" value="Q">
+                    </div>
+                </div>
+                <div class="text-center mb-4">
+                    <button type="button" class="bg-gray-800 text-white px-4 py-2 w-full btn" onclick="saveEncryptionKey()">
+                        <i class="fas fa-save mr-2"></i>Save
+                    </button>
+                </div>
+                <div class="text-center mb-4">
+                    <button type="button" class="bg-gray-800 text-white px-4 py-2 w-full btn" onclick="exportKey()">
+                        <i class="fas fa-file-export mr-2"></i>Export Key
+                    </button>
+                </div>
+                <div class="text-center mb-4">
+                    <button type="button" class="bg-gray-800 text-white px-4 py-2 w-full btn" onclick="importKey()">
+                        <i class="fas fa-file-import mr-2"></i>Import Key
+                    </button>
+                </div>
+                <div class="text-center">
+                    <button type="button" class="bg-gray-800 text-white px-4 py-2 w-full btn" onclick="randomizeKey()">
+                        <i class="fas fa-random mr-2"></i>Randomize Key
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let encryptionKey = {
+            'A': 'O', 'I': 'E', 'U': 'U', 'E': 'I', 'O': 'A',
+            'B': 'C', 'C': 'B', 'D': 'R', 'F': 'H', 'G': 'Y',
+            'H': 'F', 'J': 'V', 'K': 'L', 'L': 'K', 'M': 'N',
+            'N': 'M', 'P': 'T', 'Q': 'Z', 'R': 'D', 'S': 'X',
+            'T': 'P', 'V': 'J', 'W': '', 'X': 'S', 'Y': 'G',
+            'Z': 'Q'
+        };
+
+        function encryptText() {
+            const inputText = document.getElementById('inputText').value;
+            let encryptedText = '';
+
+            for (let char of inputText) {
+                if (encryptionKey[char.toUpperCase()]) {
+                    if (char === char.toUpperCase()) {
+                        encryptedText += encryptionKey[char];
+                    } else {
+                        encryptedText += encryptionKey[char.toUpperCase()].toLowerCase();
+                    }
+                } else {
+                    encryptedText += char;
+                }
+            }
+
+            document.getElementById('outputText').value = encryptedText;
+        }
+
+        function copyText() {
+            const outputText = document.getElementById('outputText');
+            outputText.select();
+            outputText.setSelectionRange(0, 99999); // For mobile devices
+            document.execCommand("copy");
+        }
+
+        function pasteText() {
+            navigator.clipboard.readText().then(text => {
+                document.getElementById('inputText').value = text;
+            }).catch(err => {
+                console.error('Failed to read clipboard contents: ', err);
+            });
+        }
+
+        function clearInput() {
+            document.getElementById('inputText').value = '';
+        }
+
+        function openEncryptionKeyPage() {
+            document.getElementById('encryptionKeyPage').classList.remove('hidden');
+        }
+
+        function saveEncryptionKey() {
+            const newKey = {};
+            const inputs = document.querySelectorAll('#encryptionKeyForm input[type="text"]');
+            const usedValues = new Set();
+
+            for (let input of inputs) {
+                const value = input.value.toUpperCase();
+                if (!value || usedValues.has(value)) {
+                    alert('All fields must be filled and unique.');
+                    return;
+                }
+                usedValues.add(value);
+                newKey[input.id.replace('key', '')] = value;
+            }
+
+            encryptionKey = newKey;
+            document.getElementById('encryptionKeyPage').classList.add('hidden');
+        }
+
+        function exportKey() {
+            const keyName = document.getElementById('keyName').value || 'encryption_key';
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(encryptionKey));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", `${keyName}.json`);
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        function importKey() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = e => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = event => {
+                    try {
+                        const importedKey = JSON.parse(event.target.result);
+                        if (validateImportedKey(importedKey)) {
+                            encryptionKey = importedKey;
+                            updateKeyForm();
+                            alert('Encryption key imported successfully.');
+                        } else {
+                            alert('Invalid encryption key file.');
+                        }
+                    } catch (error) {
+                        alert('Error reading encryption key file.');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
+
+        function validateImportedKey(key) {
+            const validKeys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+            const values = Object.values(key);
+            return validKeys.every(k => values.includes(k));
+        }
+
+        function updateKeyForm() {
+            for (let [key, value] of Object.entries(encryptionKey)) {
+                document.getElementById(`key${key}`).value = value;
+            }
+        }
+
+        function randomizeKey() {
+            const vowels = 'AEIOU'.split('');
+            const consonants = 'BCDFGHJKLMNPQRSTVWXYZ'.split('');
+            const shuffledVowels = vowels.sort(() => 0.5 - Math.random());
+            const shuffledConsonants = consonants.sort(() => 0.5 - Math.random());
+            const newKey = {};
+
+            vowels.forEach((letter, index) => {
+                newKey[letter] = shuffledVowels[index];
+            });
+
+            consonants.forEach((letter, index) => {
+                newKey[letter] = shuffledConsonants[index];
+            });
+
+            encryptionKey = newKey;
+            updateKeyForm();
+        }
+    </script>
+</body>
+</html>
